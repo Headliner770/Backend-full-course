@@ -1,7 +1,6 @@
 // The address of this server connected to the network is: http://localhost:8383
 // URL -> http://localhost:8383
 // IP -> 127.0.0.1:8383
-
 const express = require("express");
 const app = express();
 const PORT = 8383;
@@ -20,17 +19,25 @@ app.use(express.json());
 // come when a user enters a url in a browser)
 
 app.get("/", (req, res) => {
+  console.log("User requested the home page website");
+
   res.send(`
-    <body 
-    style="background: pink;
-    color: blue;">
+    <body style="background: pink;color: blue;">
     <h1>DATA:</h1>
     <p>${JSON.stringify(data)}</p>
-    </body>`);
+    <a href="/dashboard">Dashboard</a>
+    </body>
+    <script>console.log('This is my script')</script>
+    `);
 });
 
 app.get("/dashboard", (req, res) => {
-  res.send("<h1>dashboard</h1>");
+  res.send(`
+    <body>
+    <h1>dashboard</h1>
+    <a href="/">home</a>
+        </body>
+    `);
 });
 
 // Type 2 - API endpoints (non visual)
@@ -39,7 +46,7 @@ app.get("/dashboard", (req, res) => {
 
 app.get("/api/data", (req, res) => {
   console.log("This one was for data");
-  res.send(data);
+  res.status(599).send(data);
 });
 
 app.post("/api/data", (req, res) => {
@@ -54,7 +61,7 @@ app.post("/api/data", (req, res) => {
   res.sendStatus(201);
 });
 
-app.delete("/api/endpoint", (req, res) => {
+app.delete("/api/data", (req, res) => {
   data.pop();
   console.log("We deleted the element off the end of the array");
 });
