@@ -6,9 +6,10 @@ const express = require("express");
 const app = express();
 const PORT = 8383;
 
-let data = {
-    name: ''
-}
+let data = ["james"];
+
+// Middleware
+app.use(express.json());
 
 //  ENDPOINT - HTTP VERBS (method) && Routes (or paths)
 //  The method informs the nature of request and the route is a further
@@ -19,18 +20,43 @@ let data = {
 // come when a user enters a url in a browser)
 
 app.get("/", (req, res) => {
-  res.send("<h1>homepage</h1>");
+  res.send(`
+    <body 
+    style="background: pink;
+    color: blue;">
+    <h1>DATA:</h1>
+    <p>${JSON.stringify(data)}</p>
+    </body>`);
 });
 
 app.get("/dashboard", (req, res) => {
   res.send("<h1>dashboard</h1>");
 });
 
-// Type 2 - API endpoints
+// Type 2 - API endpoints (non visual)
+
+// CRUD-method - create read-get update-put and delete-delete
 
 app.get("/api/data", (req, res) => {
-    console.log('This one was for data');
-    res.send(data)
+  console.log("This one was for data");
+  res.send(data);
+});
+
+app.post("/api/data", (req, res) => {
+  //   someone wants to create a user (for example when they click a sign up
+  // button)
+  //   the user clicks the sign up button after entering their credentials, and
+  // their browser is wired up to send out a network request to the server to
+  // handle that action
+  const newEntry = req.body;
+  console.log(newEntry);
+  data.push(newEntry.name);
+  res.sendStatus(201);
+});
+
+app.delete("/api/endpoint", (req, res) => {
+  data.pop();
+  console.log("We deleted the element off the end of the array");
 });
 
 app.listen(PORT, () => console.log(`Server has started on: ${PORT}`));
